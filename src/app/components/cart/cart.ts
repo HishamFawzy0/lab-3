@@ -12,11 +12,13 @@ export class Cart {
   private http = inject(HttpClient);
 
   Carts!: ICart[];
-
+ 
   ngOnInit(): void {
-    this.http
-      .get('Cart.json')
-      .subscribe((data) => (this.Carts = data as ICart[]));
+
+    // read from local storage
+    const storedCart = localStorage.getItem('cart');
+    this.Carts = storedCart ? JSON.parse(storedCart) : [];
+    
   }
 
   getTotal(): any {
@@ -33,25 +35,21 @@ export class Cart {
   removeItem(index: number) {
 
     this.Carts.splice(index, 1);
-    
-    this.http
-      .put('Cart.json', this.Carts)
-      .subscribe((data) => console.log(data));
+    // remove from local storage
+    localStorage.setItem('cart', JSON.stringify(this.Carts));
+
   }
 
   decrement(index: number) {
     this.Carts[index].quantity -= 1;
-    this.http
-      .put('Cart.json', this.Carts)
-      .subscribe((data) => console.log(data));
+
+    if (this.Carts[index].quantity <= 0) {
+      this.removeItem(index);
+    }
   }
 
   increment(index: number) {
     this.Carts[index].quantity += 1;
-    this.http
-      .put('Cart.json', this.Carts)
-      .subscribe((data) => console.log(data));
+    localStorage.setItem('cart', JSON.stringify(this.Carts));
   }
-
-
 }
