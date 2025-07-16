@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { IProduct } from '../../interface/Produc/iproduct';
+import { AuthService } from '../../service/authService/auth-service';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,9 @@ import { IProduct } from '../../interface/Produc/iproduct';
 })
 export class Home {
   private http = inject(HttpClient);
+  private auth=inject(AuthService);
+
+  data=this.auth.getUserNameFromToken();
 
   Products: IProduct[] = [];
   Carts: any[] = [];

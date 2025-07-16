@@ -1,48 +1,52 @@
-import { Component, inject, NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/authService/auth-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+
+
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule,RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
 })
 export class Login {
-  formData: any = {};
+  formData = {
+    Email: '',
+    Password: '',
+  };
 
-  flag: boolean = false;
-  errorex!: string;
+  flag = false;
+  errorex = '';
 
   auth = inject(AuthService);
-
   router = inject(Router);
 
   onSubmit(form: any) {
-    if (form.valid) {
-      if (
-        this.formData.email === 'hishamfawzy16@gmail.com' &&
-        this.formData.password === '123456'
-      ) {
-        this.auth.login(this.formData);
-        this.router.navigate(['/home']);
-      } else if (!this.formData.email && !this.formData.password) {
-        this.flag = true;
-        this.errorex = 'Please enter email and password';
-      } else if (!this.formData.email) {
-        this.flag = true;
-        this.errorex = 'Please enter email';
-      } else if (!this.formData.password) {
-        this.flag = true;
-        this.errorex = 'Please enter password';
-      } else {
-        this.flag = true;
-        this.errorex = 'Wrong email or password';
-      }
-    } else {
+    if (!form.valid) {
       this.flag = true;
-      this.errorex = 'Please enter email and password';
-      console.log('Form is invalid');
+      this.errorex = 'Please fill in all required fields';
+      return;
     }
+
+    this.auth.getlogin(this.formData).subscribe({
+      next: (res) => {
+        this.auth.jwtToken = res.token;
+        this.auth.realdata = jwtDecode(res.token);
+        console.log(this.auth.realdata);
+        this.auth.login(); // التوكن موجود خلاص
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        console.log(err);
+        this.flag = true;
+        this.errorex = 'Invalid email or password';
+      },
+      complete: () => {
+        console.log('Login request complete.');
+      },
+    });
   }
 }

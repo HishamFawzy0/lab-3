@@ -1,0 +1,62 @@
+<form #form="ngForm" (ngSubmit)="onSubmit(form)" class="max-w-xl bg-white rounded-lg border border-gray-200 p-8 shadow-2xl  mt-24 mx-auto">
+    <div class="grid md:grid-cols-2 md:gap-6">
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="text" [(ngModel)]="formData.FirstName" name="floating_first_name" id="floating_first_name"
+                class="block py-2.5 mt-2 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" " required />
+            <label for="floating_first_name"
+                class="peer-focus:font-medium absolute  text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First
+                name</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="text" [(ngModel)]="formData.LastName" name="floating_last_name" id="floating_last_name"
+                class="block py-2.5 mt-2 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" " required />
+            <label for="floating_last_name"
+                class="peer-focus:font-medium absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last
+                name</label>
+        </div>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="email" [(ngModel)]="formData.Email" name="floating_email" id="floating_email"
+            class="block py-2.5  px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" " required />
+        <label for="floating_email"
+            class="peer-focus:font-medium -my-2 absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email
+            address</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="password" [(ngModel)]="formData.Password" name="floating_password" id="floating_password"
+            class="block py-2.5  px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" " required />
+        <label for="floating_password"
+            class="peer-focus:font-medium -my-2 absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+    </div>
+    
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="number" [(ngModel)]="formData.Age" name="floating_phone" id="floating_phone"
+            class="block py-2.5  px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" " required />
+        <label for="floating_phone" 
+            class="peer-focus:font-medium -my-2 absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone
+            Age</label>
+    </div>
+    <!-- إضافة رسالة الخطأ -->
+    @if (flag) {
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">Error:</span> <span class="font-medium">{{ errorex }}</span>
+    </div>
+    }
+
+
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm  text-gray-800  ">Dont have an account? <span
+                    class="text-blue-400 font-extrabold text-xl  hover:underline hover:cursor-pointer"><a
+                        routerLink="/Register">Register</a></span></p>
+        </div>
+    <button type="submit"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+        </div>
+
+    </form>
