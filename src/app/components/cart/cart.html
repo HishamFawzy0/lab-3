@@ -1,47 +1,118 @@
+<div
+    class="max-w-4xl mx-auto my-10 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl border border-gray-100">
+    <div class="flex items-center mb-8">
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-3 rounded-full mr-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5.4M7 13v6a2 2 0 002 2h6.5m0 0a2 2 0 002-2v-6m-8.5 0h8.5">
+                </path>
+            </svg>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-800">Your Cart</h2>
+    </div>
 
-<div class="max-w-4xl mx-auto my-10 p-6 bg-white rounded-xl shadow-md border">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">🛒 Your Cart</h2>
+    @if (cart?.items?.length === 0) {
+    <div class="text-center py-16">
+        <div class="bg-gray-100 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+        </div>
+        <p class="text-xl text-gray-500 font-medium">Your cart is empty</p>
+        <p class="text-gray-400 mt-2">Add some items to get started!</p>
+    </div>
+    } @else {
+    <div class="space-y-6">
+        @for ( item of cart.items; track $index ) {
+        <div
+            class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="relative">
+                        <img src="{{ item.imageUrl }}" alt="Product"
+                            class="w-24 h-24 rounded-xl object-cover border-2 border-gray-100 shadow-sm" />
+                        <div
+                            class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            {{ item.quantity }}
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-1">{{ item.productName }}</h3>
+                        <p class="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">ID: {{
+                            item.productId }}</p>
+                    </div>
+                </div>
 
-    @if (Carts.length == 0) {
-        <p class="text-gray-500">Your cart is empty.</p>
-    }@else{
-        @for (item of Carts; track $index) {
-        
-        <div class="flex items-center justify-between gap-4 border-b pb-4 mb-4">
-            <div class="flex items-center gap-4">
-                <img src="{{item.images[0]}}" alt="Product" class="w-20 h-20 rounded object-cover border" />
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800">{{item.title}}</h3>
-                    <p class="text-sm text-gray-500 line-clamp-2">{{item.description}}</p>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center bg-gray-50 rounded-xl p-1 shadow-inner">
+                        <button (click)="decrement(item.productId)"
+                            class="w-10 h-10 cursor-pointer bg-white hover:bg-gray-100 text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center font-semibold">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4">
+                                </path>
+                            </svg>
+                        </button>
+                        <input type="number" [value]="item.quantity" readonly
+                            class="w-16 text-center bg-transparent font-semibold text-lg border-0 ms-4 text-gray-800 outline-none mx-2" />
+                        <button (click)="increment(item.productId)"
+                            class="w-10 h-10 cursor-pointer bg-white hover:bg-gray-100 text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center font-semibold">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="text-right">
+                        <p
+                            class="text-2xl font-bold text-gray-800 bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                            ${{ item.price }}
+                        </p>
+                    </div>
+
+                    <button (click)="removeItem(item.productId)"
+                        class="w-10 h-10 cursor-pointer bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 rounded-lg transition-all duration-200 flex items-center justify-center group">
+                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
-            </div>
-        
-            <div class="flex items-center gap-4">
-                <div class="flex items-center border rounded-md overflow-hidden">
-                    <button (click)="decrement($index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700">-</button>
-                    <input type="number" value="{{item.quantity}}" class="w-12 text-center border-l border-r outline-none" />
-                    <button (click)="increment($index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700">+</button>
-                </div>
-        
-                <p class="text-lg font-semibold text-gray-800">${{item.price}}</p>
-        
-                <button (click)="removeItem($index)" class="text-red-600 hover:text-red-800">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
             </div>
         </div>
         }
-    
-        <div class="text-right mt-6">
-            <p class="text-xl font-semibold text-gray-800">Total: ${{getTotal()}}</p>
-            <button class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
-                Checkout
-            </button>
+    </div>
+
+    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 mt-8 border border-gray-200">
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-lg font-medium text-gray-600">Total Amount</span>
+            <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                ${{ getTotal() }}
+            </p>
         </div>
 
-    }
+        <div class="flex justify-between gap-4">
+            <button (click)="clearCart()"
+                class="flex-1 cursor-pointer bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                </svg>
+                Clear Cart
+            </button>
 
+            <button
+                class="flex-1 cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                    </path>
+                </svg>
+                Checkout
+            </button>
+        </div> 
+    </div>
+    }
 </div>

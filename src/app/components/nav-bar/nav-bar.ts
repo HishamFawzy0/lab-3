@@ -1,9 +1,11 @@
-import { Component, inject, SimpleChanges } from '@angular/core';
+import { Component, inject, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../service/authService/auth-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
+  standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.css',
@@ -11,18 +13,15 @@ import { AuthService } from '../../service/authService/auth-service';
 export class NavBar {
   auth = inject(AuthService);
   route = inject(Router);
+  @Inject(PLATFORM_ID) platformId: Object = inject(PLATFORM_ID);
 
- data:any;
-
-  islogged!: boolean;
+  data: any;
+  islogged: boolean = false;
 
   ngAfterContentChecked(): void {
-
-     this.data = this.auth.getUserNameFromToken();
-    if (localStorage.getItem('user') == null) {
-      this.islogged = false;
-    } else {
-      this.islogged = true;
+    if (isPlatformBrowser(this.platformId)) {
+      this.data = this.auth.getUserNameFromToken();
+      this.islogged = localStorage.getItem('user') !== null;
     }
   }
 
@@ -31,3 +30,4 @@ export class NavBar {
     this.route.navigate(['Login']);
   }
 }
+ 

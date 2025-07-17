@@ -1,28 +1,34 @@
+import { Product } from './../../service/productService/product';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
-import { IProduct } from '../../interface/Produc/iproduct';
 import { AuthService } from '../../service/authService/auth-service';
+import { CartService } from '../../service/CartService/cart';
+import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [],
-  templateUrl: './home.html',
+  imports: [CommonModule],
+  templateUrl: 'home.html',
   styleUrl: './home.css',
 })
 export class Home {
   private http = inject(HttpClient);
-  private auth=inject(AuthService);
+  private auth = inject(AuthService);
+  private Product = inject(Product);
+  private cart = inject(CartService);
 
-  data=this.auth.getUserNameFromToken();
+  data = this.auth.getUserNameFromToken();
 
   Products: IProduct[] = [];
   Carts: any[] = [];
   fillterdProducts: IProduct[] = [];
 
   ngOnInit(): void {
-    this.http.get('Products.json').subscribe((data) => {
-      this.Products = data as IProduct[];
+    this.Product.getProducts().subscribe((data) => {
+      this.Products = data;
       this.fillterdProducts = this.Products;
+      console.log(this.fillterdProducts);
     });
   }
 
@@ -30,29 +36,35 @@ export class Home {
     return Array(rating).fill(0);
   }
 
-  getAveRaating(product: IProduct): number {
-    const avg =
-      product.reviews.reduce((total, review) => total + review.rating, 0) /
-      product.reviews.length;
-
-    return +avg.toFixed(1);
-  }
-
   addToCart(product: IProduct): void {
-    if (!localStorage.getItem('cart')) {
-      localStorage.setItem('cart', JSON.stringify([]));
-    }
-    const storedCart = localStorage.getItem('cart');
-    this.Carts = storedCart ? JSON.parse(storedCart) : [];
+    this.cart.AddToCart(product.id, 1).subscribe({
+      next: (res) => {
+        console.log('✅ Product added to cart successfully:', res);
 
-    const cartItem = this.Carts.find((item) => item.id === product.id);
-    if (cartItem) {
-      cartItem.quantity++;
-    } else {
-      this.Carts.push({ ...product, quantity: 1 });
-    }
+        Swal.fire({
+          icon: 'success',
+          title: 'Added!',
+          text: `${product.name} has been added to your cart.`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: 'top-end',
+          toast: true,
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error adding product to cart:', err);
 
-    localStorage.setItem('cart', JSON.stringify(this.Carts));
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Something went wrong while adding the product.',
+          timer: 2500,
+          showConfirmButton: false,
+          position: 'top-end',
+          toast: true,
+        });
+      },
+    });
   }
 
   filterProducts(event: any): void {
@@ -61,17 +73,8 @@ export class Home {
       this.fillterdProducts = this.Products;
     } else {
       this.fillterdProducts = this.Products.filter((product) =>
-        product.title.toLowerCase().includes(selectedCategory)
+        product.name.toLowerCase().includes(selectedCategory)
       );
     }
-
-    // addToCart(product: IProduct): void {
-    //   const cartItem = this.Carts.find((item) => item.id === product.id);
-    //   if (cartItem) {
-    //     cartItem.quantity++;
-    //   } else {
-    //     this.Carts.push({ ...product, quantity: 1 });
-    //   }
-    // }
   }
 }

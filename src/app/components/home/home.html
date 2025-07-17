@@ -1,44 +1,160 @@
-<div class="px-10 py-10">
- 
- 
-    <div>
-        <input type="text" (input)="filterProducts($event)" placeholder="Search for products..." class="w-full max-w-2xl bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 mx-auto mb-6 " name="" id="">
-    </div>
-
-    <div class=" grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-        @for (product of fillterdProducts; track $index) {
-<div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-  
-        <img class="p-8 rounded-t-lg w-full h-100" src="{{product.images[0]}}"  alt="product image" />
-   
-    <div class="px-5 pb-5">
-       
-            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{product.title}}</h5>
-       
-        <div class="flex items-center mt-2.5 mb-5">
-            <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                @for (star of getStarsArray(product.reviews[0].rating); track $index) {
-
-                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor" viewBox="0 0 22 20">
-                        <path
-                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    
-                } 
+<!-- Modern Home Page Component -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Header Section -->
+    <div class="bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Discover Amazing Products</h1>
+                <p class="text-lg text-gray-600">Find exactly what you're looking for</p>
             </div>
-            <span 
-                class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm  dark:bg-blue-200 dark:text-blue-800 ms-3">{{getAveRaating(product)}} </span>
-        </div>
-        <div class="flex items-center justify-between">
-            <span class="text-3xl font-bold text-gray-900 dark:text-white">${{product.price}}</span>
-            <button  (click)="addToCart(product)"
-                class="text-white bg-blue-700 cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add
-                to cart</button>
+
+            <!-- Enhanced Search Bar -->
+            <div class="relative max-w-2xl mx-auto">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="text" (input)="filterProducts($event)" placeholder="Search for products..."
+                    class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 text-lg">
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                    <kbd
+                        class="hidden sm:inline-flex items-center px-2 py-1 border border-gray-200 rounded text-xs font-sans font-medium text-gray-400">
+                        ⌘K
+                    </kbd>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Products Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            @for (product of fillterdProducts; track $index) {
+            <div
+                class="group bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
+                <!-- Product Image Container -->
+                <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 rounded-t-3xl">
+                    <img class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        src="{{product.imageURL}}"  />
+                    <!-- Overlay on hover -->
+                    
+
+                    <!-- Quick view badge -->
+                    <div
+                        class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-2 shadow-lg">
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-6">
+                    <div class="mb-4">
+                        <h3
+                            class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
+                            {{product.name}}
+                        </h3>
+
+                        <!-- Rating Stars (placeholder) -->
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-yellow-400">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                </svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                </svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                </svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                </svg>
+                                <svg class="w-4 h-4 fill-current text-gray-300" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm text-gray-500 ml-2">(4.0)</span>
+                        </div>
+                    </div>
+
+                    <!-- Price and Add to Cart -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span
+                                class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                ${{product.price}}
+                            </span>
+                            <span class="text-sm text-gray-500 line-through">${{(product.price *
+                                1.2).toFixed(2)}}</span>
+                        </div>
+
+                        <button (click)="addToCart(product)"
+                            class="group/btn relative bg-gradient-to-r cursor-pointer from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 overflow-hidden">
+                            <!-- Button background animation -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                            </div>
+
+                            <!-- Button content -->
+                            <div class="relative cursor-pointer flex items-center space-x-2">
+                                <svg class="w-5 h-5 cursor-pointer transform group-hover/btn:scale-110 transition-transform duration-200"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5.4M7 13v6a2 2 0 002 2h6.5m0 0a2 2 0 002-2v-6m-8.5 0h8.5">
+                                    </path> 
+                                </svg>
+                                <span class="text-sm cursor-pointer font-medium">Add to Cart</span>
+                            </div>
+
+                            <!-- Ripple effect -->
+                            <div
+                                class="absolute inset-0 rounded-2xl opacity-0 group-hover/btn:opacity-20 bg-white group-hover/btn:animate-ping">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product badges -->
+                
+            </div>
+            }
+        </div>
+
+        <!-- Empty State -->
+        @if (fillterdProducts?.length === 0) {
+        <div class="text-center py-20">
+            <div class="bg-gray-100 rounded-full w-32 h-32 mx-auto mb-8 flex items-center justify-center">
+                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-600 mb-4">No products found</h3>
+            <p class="text-gray-500 text-lg">Try adjusting your search terms or browse our categories</p>
+        </div>
+        }
+    </div>
+
+    <!-- Loading State (optional) -->
+    <!-- @if (isLoading) {
+    <div class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+    </div>
+  } -->
 </div>
-}
-        
-    </div>
-</div> 
